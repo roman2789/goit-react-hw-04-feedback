@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/goit-react-hw-04-feedback/static/js/main.636656ce.js",
+    "main.js": "/goit-react-hw-04-feedback/static/js/main.e02fbec1.js",
     "index.html": "/goit-react-hw-04-feedback/index.html",
-    "main.636656ce.js.map": "/goit-react-hw-04-feedback/static/js/main.636656ce.js.map"
+    "main.e02fbec1.js.map": "/goit-react-hw-04-feedback/static/js/main.e02fbec1.js.map"
   },
   "entrypoints": [
-    "static/js/main.636656ce.js"
+    "static/js/main.e02fbec1.js"
   ]
 }
