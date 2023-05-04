@@ -1,59 +1,64 @@
-import { Component } from 'react';
 import Section from './Section/Section';
 import Statistics from './Statistics/Statistics';
 import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
 import Notification from './Notification/Notification';
 import { Container } from './AppStyled';
 import { GlobalStyles } from 'GlobalStyles';
+import { useState } from 'react';
 
-class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+const App = () => {
+  const [goodFeedback, setGoodFeedback] = useState(0);
+  const [neutralFeedback, setNeutralFeedback] = useState(0);
+  const [badFeedback, setBadFeedback] = useState(0);
+
+  const addFeedback = e => {
+    const option = e.target.name;
+    switch (option) {
+      case 'good':
+        setGoodFeedback(prevGoodFeedback => prevGoodFeedback + 1);
+        break;
+      case 'neutral':
+        setNeutralFeedback(prevNeutralFeedback => prevNeutralFeedback + 1);
+        break;
+      case 'bad':
+        setBadFeedback(prevBadFeedback => prevBadFeedback + 1);
+        break;
+      default:
+        return;
+    }
   };
-  handleIncrStateValues = evt => {
-    const feedbackType = evt.target.name;
-    this.setState(prevState => ({
-      [feedbackType]: prevState[feedbackType] + 1,
-    }));
+  const countTotalFeedback = () => {
+    return goodFeedback + neutralFeedback + badFeedback;
   };
 
-  countTotalFeedback = () => {
-    return this.state.good + this.state.neutral + this.state.bad;
+  const countPositiveFeedbackPercentage = () => {
+    return Math.round((goodFeedback / countTotalFeedback()) * 100);
   };
-  countPositiveFeedbackPercentage = () => {
-    const { good } = this.state;
-    return Math.round((good / this.countTotalFeedback()) * 100);
-  };
-  render() {
-    const { good, neutral, bad } = this.state;
-    const total = this.countTotalFeedback();
-    const goodFeedbackPercentage = this.countPositiveFeedbackPercentage();
-    return (
-      <Container>
-        <GlobalStyles />
-        <Section title="Please leave feedback">
-          <FeedbackOptions
-            feedbackVariants={Object.keys(this.state)}
-            onFeedbackCklick={this.handleIncrStateValues}
+
+  return (
+    <Container>
+      <GlobalStyles />
+      <Section title="Please leave feedback">
+        <FeedbackOptions
+          options={['good', 'neutral', 'bad']}
+          onFeedbackCklick={addFeedback}
+        />
+      </Section>
+      <Section title="Statistics">
+        {countTotalFeedback() === 0 ? (
+          <Notification message="There is no feedback!" />
+        ) : (
+          <Statistics
+            goodFeedback={goodFeedback}
+            neutralFeedback={neutralFeedback}
+            badFeedback={badFeedback}
+            totalFeedbacks={countTotalFeedback()}
+            goodFeedbackPercentage={countPositiveFeedbackPercentage()}
           />
-        </Section>
-        <Section title="Statistics">
-          {total === 0 ? (
-            <Notification message="There is no feedback!" />
-          ) : (
-            <Statistics
-              goodFeedback={good}
-              neutralFeedback={neutral}
-              badFeedback={bad}
-              totalFeedbacks={total}
-              goodFeedbackPercentage={goodFeedbackPercentage}
-            />
-          )}
-        </Section>
-      </Container>
-    );
-  }
-}
+        )}
+      </Section>
+    </Container>
+  );
+};
+
 export default App;
